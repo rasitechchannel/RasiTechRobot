@@ -4,7 +4,7 @@
 
 <br> RasiTechRobot
  
- > This script is run using the nodo-telegram-bot-api library
+ > This script is run using the node-telegram-bot-api library
  
  it is strictly forbidden to perform spam actions when using this script 
 
