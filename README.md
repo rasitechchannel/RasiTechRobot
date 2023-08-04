@@ -53,6 +53,14 @@ cd RasiTechRobot
 npm install
 ```
 
+## Config Bot
+```bash
+Set "ownerId" to your chat id
+Set "token" to your bot token
+Set "apikey_zen" to your https://api.zahwazein.xyz/ apikey 
+Set "log_chatid" tp your group id / channel username for log and don't forget to add bot in ur group/channel before set
+```
+
 ## Start Bot
 ```bash
 npm start
@@ -61,6 +69,7 @@ node index.js
 or
 node .
 ```
+
 
 ## License
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)    
