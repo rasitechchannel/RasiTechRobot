@@ -1,0 +1,30 @@
+{
+  "name": "rasitech-robot",
+  "version": "1.0.0",
+  "description": "Free & Open Source Telegram Bot By @RasiTechChannel1",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [
+    "tools"
+  ],
+  "author": "RasiTech",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "child_process": "^1.0.2",
+    "dns-socket": "^4.2.2",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs": "^0.0.1-security",
+    "gm": "^1.25.0",
+    "moment": "^2.29.4",
+    "node-fetch": "^3.3.2",
+    "node-telegram-bot-api": "^0.61.0",
+    "os": "^0.1.2",
+    "path": "^0.12.7",
+    "ping": "^0.4.4",
+    "sharp": "^0.32.3",
+    "whois-json": "^2.0.4"
+  }
+}
