@@ -55,6 +55,7 @@ npm install
 
 ## Config Bot
 ```bash
+Open ./settings/config.json
 Set "ownerId" to your chat id
 Set "token" to your bot token
 Set "apikey_zen" to your https://api.zahwazein.xyz/ apikey 
