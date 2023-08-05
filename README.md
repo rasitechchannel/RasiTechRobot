@@ -59,6 +59,7 @@ Open ./settings/config.json
 Set "ownerId" to your chat id
 Set "token" to your bot token
 Set "apikey_zen" to your https://api.zahwazein.xyz/ apikey 
+Set "apikey_miftah" to your https://api-miftah.xyz/ apikey 
 Set "log_chatid" tp your group id / channel username for log and don't forget to add bot in ur group/channel before set
 ```
 
