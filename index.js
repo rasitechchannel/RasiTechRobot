@@ -54,7 +54,95 @@ function splitTextIntoParts(text, maxLength) {
   }
 
   return parts;
+
 }
+
+
+// Fungsi untuk mendownload video dari API
+async function downloadYouTubeVideo(url) {
+  const apiUrl = `https://api-miftah.xyz/api/downloader/youtube-video?url=${encodeURIComponent(url)}&key=ganzzz`;
+
+  try {
+    const response = await axios.get(apiUrl);
+    return response.data;
+  } catch (error) {
+    console.error('Error downloading YouTube video:', error);
+    return null;
+  }
+}
+
+// Fungsi untuk menyimpan video ke file lokal
+async function saveVideoToLocal(url) {
+  const videoResponse = await axios.get(url, { responseType: 'stream' });
+  const videoFile = fs.createWriteStream('video.mp4');
+  videoResponse.data.pipe(videoFile);
+
+  return new Promise((resolve, reject) => {
+    videoFile.on('finish', () => resolve());
+    videoFile.on('error', (error) => reject(error));
+  });
+}
+
+// Fungsi untuk mendapatkan gambar sambutan dari API
+async function getWelcomeImage(name, groupName, memberCount, profilePhotoUrl, background) {
+  const apiUrl = `https://api-miftah.xyz/api/canvas/welcome?name=${encodeURIComponent(name)}&groupname=${encodeURIComponent(groupName)}&member=${memberCount}&profilepicture=${profilePhotoUrl}&background=${background}&key=${settings.apikey_miftah}`;
+
+  try {
+    const response = await axios.get(apiUrl);
+    return response.data.url;
+  } catch (error) {
+    console.error('Error fetching welcome image:', error);
+    return null;
+  }
+}
+
+
+
+// Handler untuk event "new_chat_members", yaitu saat ada anggota baru masuk grup
+bot.on('new_chat_members', async (message) => {
+  const chatId = message.chat.id;
+
+  // Ambil informasi dari grup dan anggota baru yang masuk
+  const groupName = message.chat.title;
+  const memberCount = message.chat.members_count;
+  const newUser = message.new_chat_member;
+  const userName = newUser.username || newUser.first_name;
+
+  // Ambil URL foto profil pengguna
+  let profilePhotoUrl = '';
+  if (newUser.id) {
+    try {
+      const userProfilePhotos = await bot.getUserProfilePhotos(newUser.id);
+      if (userProfilePhotos.total_count > 0) {
+        const photo = userProfilePhotos.photos[0][0];
+        profilePhotoUrl = await bot.getFileLink(photo.file_id);
+      }
+    } catch (error) {
+      console.error('Error getting user profile photo:', error);
+    }
+  }
+
+  const background = settings.bgwelcome;
+
+  // Ambil gambar sambutan dari API
+  const welcomeImage = await getWelcomeImage(userName, groupName, memberCount, profilePhotoUrl, background);
+
+  // Kirim pesan gambar sambutan
+  if (welcomeImage) {
+    bot.sendPhoto(chatId, welcomeImage, { caption: `Selamat datang di grup ${groupName}, @${userName}!` })
+      .catch((error) => console.error('Error sending welcome image:', error));
+  }
+});
+
+// Handler untuk event "left_chat_member", yaitu saat ada anggota keluar dari grup
+bot.on('left_chat_member', (message) => {
+  const chatId = message.chat.id;
+  const userName = message.left_chat_member.username || message.left_chat_member.first_name;
+
+  bot.sendMessage(chatId, `Sampai jumpa lagi, @${userName}! Semoga harimu menyenangkan.`)
+    .catch((error) => console.error('Error sending goodbye message:', error));
+});
+
 
 // Mendengarkan event "message" dari pengguna
 bot.on("message", async (msg) => {
@@ -92,6 +180,33 @@ bot.on("message", async (msg) => {
   console.log(msg);
   // Memisahkan teks menjadi array
   switch (command) {
+    case "/ytmp4":
+  // Download video dari API
+  const downloadResponse = await downloadYouTubeVideo(query);
+
+  if (downloadResponse && downloadResponse.status === 'Success') {
+    const data = downloadResponse.data;
+    const responseMessage = `
+Title: ${data.title}
+Channel: ${data.channel}
+Published: ${data.published}
+Views: ${data.views}`;
+
+    // Simpan video ke file lokal "video.mp4"
+    await saveVideoToLocal(data.url);
+
+    // Kirim video dari file lokal "video.mp4" ke pengguna
+    bot.sendVideo(chatId, 'video.mp4', { caption: responseMessage })
+      .then(() => {
+        // Hapus file lokal setelah dikirim
+        fs.unlinkSync('video.mp4');
+      })
+      .catch((error) => console.error('Error sending YouTube video:', error));
+  } else {
+    bot.sendMessage(chatId, 'Maaf, terjadi kesalahan saat mendownload video. Pastikan URL video YouTube valid dan coba lagi.')
+      .catch((error) => console.error('Error sending error message:', error));
+  }
+    break
     case "/sticker":
       if (!msg.reply_to_message || !msg.reply_to_message.photo) {
         bot.sendMessage(
