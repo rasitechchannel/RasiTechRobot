@@ -368,6 +368,9 @@ FITUR GENERAL
 /id
 /help
 
+FITUR DOWNLOAD
+/ytmp4
+
 FITUR STICKER
 /sticker
 /toimg
