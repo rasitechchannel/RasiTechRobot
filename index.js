@@ -60,7 +60,7 @@ function splitTextIntoParts(text, maxLength) {
 
 // Fungsi untuk mendownload video dari API
 async function downloadYouTubeVideo(url) {
-  const apiUrl = `https://api-miftah.xyz/api/downloader/youtube-video?url=${encodeURIComponent(url)}&key=ganzzz`;
+  const apiUrl = `https://api-miftah.xyz/api/downloader/youtube-video?url=${encodeURIComponent(url)}&key=${settings.apikey_miftah}`;
 
   try {
     const response = await axios.get(apiUrl);
