@@ -1422,7 +1422,7 @@ function checkPremium(userId) {
 // Menambahkan pengguna ke daftar premium
 function addPremiumUser(userId) {
   const premiumData = getPremiumData();
-  premiumData.push(userId);
+  premiumData.push(parseInt(userId));
   savePremiumData(premiumData);
 }
 
