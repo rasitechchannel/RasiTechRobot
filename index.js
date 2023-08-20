@@ -22,7 +22,6 @@ const settings = JSON.parse(
 // console.log(settings.ownerId)
 
 // Ganti dengan token bot Telegram Anda
-// const token = "6175150154:AAGiMJ72Q-9TnUEL8oOIzLdHPcbWvyHmTBU";
 const token = settings.token;
 // const apiKey = settings.apikey_zen;
 
